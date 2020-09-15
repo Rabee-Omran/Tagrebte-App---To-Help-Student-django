@@ -1,0 +1,99 @@
+{% extends 'base.html'%}
+{%load static%}
+{% load bootstrap4 %}
+
+
+ {%block content%}
+ 
+ <div class="col-md-2 mt-5">
+   
+    <form method="GET">
+        {% bootstrap_form  myfilter.form %}
+   
+        <button class="btn btn-outline-info my-2 my-sm-0 p-2" type="submit">بحث</button>
+    </form>       
+ </div>
+ <div class="col-md-7 mt-5">
+
+   
+    <div class="container mt-3">
+        
+   
+    
+
+        <div class="row">
+            {% for t in type %}
+            <div class="col-auto mx-auto mb-3 ">
+                <div class=" card bg-info text-white shadow-lg border-dark ">
+                    <div class="card-body">
+                    <p class="card-title text-center " style = "height: 25px; width: 25px; background-color: rgb(109, 108, 108); border-radius: 50%;">{{t.post_count}}</p>   <a href="{%  url 'index' t.id   %}" style="color: white; text-decoration: none;"><h5 class="card-body">{{t.types}}</h5></a>                   
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+
+        </div>
+      
+    </div>
+    
+
+
+    {% include 'pagination.html' with page=type %}
+
+
+
+
+
+{% endblock content %}
+
+{% block latest %}
+<div class="col-md-3 mt-5 mx-auto rounded">
+     <div class="rounded card mb-3 mx-auto" style="border-style: none;">
+        
+           <h3 class="rounded-pill text-center bg-info text-light p-2">آخر المنشورات</h3> 
+           <ul class="list-group-flush latest-post">
+
+
+            {% for p in post %}
+           
+        
+        
+            <li class="list-group-item latest-post-item " style="  border-bottom-right-radius: 20%;border-bottom-left-radius: 20%; border-bottom-color: #5bc0de ;">
+            <a class="text-dark" style="text-decoration: none;"  href="{% url 'detail' p.id %}">
+            
+            
+
+
+
+             {% if p.content|length > 15%}
+    {{p.content|slice:'15'}}.....
+  
+    {% else %}
+    {{p.content}}
+    {% endif %}
+            
+            
+          
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </a></li>
+              
+        
+           
+            {% empty %}
+            <li class="list-group-item latest-comment-item">لا يوجد منشورات بعد</li>
+            {%endfor%}
+        
+        </ul>
+     </div>
+      
+ </div>
+{% endblock latest %}

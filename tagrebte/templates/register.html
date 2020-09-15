@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+ {%block content%}
+ <div class="col-md-12 mt-5">
+
+ {% load bootstrap4 %}
+
+
+
+    <legend class="border-bottom pb-1 mb-3 "> التسجيل</legend>
+    <div class="border p-4 mb-5 mt-4">
+        <form method="POST">
+        {% csrf_token %}
+         {% bootstrap_form form %}
+        
+        <input class="btn btn-info mt-4" style="border-radius: 45px;" type="submit" value="تسجيل">
+            <div class="border-top mt-4 pt-2">
+                <small>إذا كان لديك حساب من قبل فيمكنك <a href="{% url 'login' %}">تسجيل الدخول</a></small>
+            </div>
+
+    </form>
+    </div>
+
+
+     {%endblock%}

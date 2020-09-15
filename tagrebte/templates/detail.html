@@ -1,0 +1,92 @@
+{% extends 'base.html'%}
+{%load static%}
+ {%block content%}
+<div class="col-md-12 mt-5">
+
+ {% load bootstrap4 %}
+
+<div class="border p-3 m-4 ">
+
+  <div class="row m-1">
+  <div class="column"> <img class="img-fluid rounded-circle border m-2" style="  width: 70px;  height: 70px;" src="{{post.owner.profile.image.url}}" alt="صورة الناشر"></div>
+  <div class="column mt-4">
+      <span style="font-size: 20px;">{{post.owner}}</span>
+        {%if post.owner.is_superuser%}
+     <img class=" mr-2" width="15px" src="{% static 'images/102649.png' %}">
+        {%endif%}
+<div><span class="text-secondary ">نشر في</span>
+    <span class="text-secondary">{{post.published_at|date:'d m Y '}} </span>
+</div></div>
+           {% if post.owner == user or user.is_superuser%}
+    <div class="form-group btn-editing mt-4 pt-1 mr-5 pr-5 ">
+    <a class="btn btn-info ml-2 " style="border-radius: 45px;" href="{% url 'post_update' post.id %}"> تحرير</a>
+         <a class="btn btn-danger back-btn " style="border-radius: 45px;" href="{% url 'post_delete' post.id %}"> حذف</a>
+    </div>  
+    {% endif %}
+    
+</div>
+   
+{% if post.mytype != "تجربة" %}
+ <h5 class="text-danger pr-2">{{post.mytype}}</h3>
+{% endif %}
+    <p><code class="comment_body text-dark" style=" font-size: 20px; white-space: pre-line;" >{{post.content}}</code></p>
+ 
+
+
+
+</div>
+
+
+    <h3 class="border-bottom mt-5 mb-3"> التعليقات والاستفسارات ({{comments.count}})</h2>
+   {% for comment in comments %}
+
+{% if comment.user == comment.post.owner %}
+<ul class="p-3 comment rounded" style =" background-color:rgb(209, 225, 231);">
+
+
+{% else %}
+
+<ul class="p-3 comment">
+
+{% endif %}
+
+    <div class="container">
+        <div class="row">
+        
+            <div class="col "><h5 class="border-bottom p-2">( {{comment.name}} ) <span
+                class="text-secondary">{{comment.comment_date|date:'d-m-Y'}}</span></h6></div>
+                {% if user == comment.user or user.is_superuser %}
+                <div class="col-*-*"> <a style="border-radius: 45px;"  class="btn btn-danger" href="{% url 'delete_comment' comment.id comment.post.id %}" >حذف التعليق</a></div>
+                {%else%}
+                {% endif %}
+              
+            </div>
+
+    <code class="comment_body text-dark" style=" flood-color: black; font-size :20px;" >{{ comment.body}}</code>
+     
+
+
+</ul>
+
+
+ 
+{% empty %}
+<h5 class="rounded text-center p-4 mb-3 comment">لا يوجد تعليقات</h5>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<h3 class="border-bottom pb-3 mb-3 mt-5">إضافة تعليق/استفسار جديد</h3>
+
+    <div class="border p-4 mb-5 mt-4">
+        <form method="POST" >
+        {% csrf_token %}
+        {% bootstrap_form comment_form %}
+       
+        <input class="btn btn-info m-2" style="border-radius: 45px;" type="submit" value="نشر ">
+    </form>
+    </div>
+    {%else%}
+    <h3 class="border-bottom border-top pb-3 mb-3 mt-5">قم بإنشاء حساب حتى يمكنك نشر التعليق الخاص بك.</h3>
+       
+{%endif%}
+  {%endblock%}

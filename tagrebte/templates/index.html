@@ -1,0 +1,77 @@
+{% extends 'base.html'%}
+
+{%load static%}
+ {%block content%}
+ <div class="col-md-12 mt-5">
+{% load bootstrap4 %}
+
+{% for p in post %}
+
+    <div class="border p-4 m-4 rounded">
+
+   <div class="row">
+  <div class="column mb-2">
+      <img class="img-fluid rounded-circle border m-2" style="  width: 60px;  height: 60px;"  src="{{p.owner.profile.image.url}}" alt="صورة الناشر"></div>
+ <div class="column mt-4">
+      <span class="">{{p.owner}}</span>
+        {%if p.owner.is_superuser%}
+     <img class=" mr-2" width="15px" src="{% static 'images/102649.png' %}" alt=" مدير الموقع">
+        {%endif%}
+     
+  
+     <div><span class="text-secondary ">نشر في</span>
+    <span class="text-secondary">{{p.published_at|date:'d m Y '}} </span>
+
+
+</div>
+
+</div></div>
+
+{% if p.mytype != "تجربة" %}
+ <h5><a class="text-danger" style="text-decoration: none;" href="{% url 'detail' p.id %}">{{p.mytype}}</a></h3>
+{% endif %}
+   
+   <h5><code  class="comment_body text-dark"><p style="white-space: pre-line;">
+   <a href="{% url 'detail' p.id %}" style="text-decoration: none; color:black" >  {% if p.content|length > 440%}
+    {{p.content|slice:'440'}}........
+   <a class="btn btn-info mt-4" style="border-radius: 25px; " href="{% url 'detail' p.id %}">أكمل   </a>
+    {% else %}
+    {{p.content}}
+    {% endif %}</a>
+    
+   </p></code></h5>
+     <h4 class=" rounded bg-info text-center p-1 text-light">
+          <a class="text-light " style="font-size:18px;text-decoration: none;" href="{% url 'detail' p.id %}">التعليقات والاستفسارات   </a>
+        </h4>
+
+</div>
+
+{%empty%}
+<h2 class="border-bottom  pb-5"> لم يقم أحد بالنشر بعد عن هذا التخصص  :(</h2>
+
+{% endfor %}
+ {% if user.is_authenticated %}
+                <legend class="border-bottom pb-1 mb-3 "> أخبرنا تجربتك/استفسارك  </legend>
+    <div class="border p-4 mb-5 mt-4">
+        <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+      
+       
+          {% bootstrap_form form %}
+        
+       
+        <input class="btn btn-info mt-4"  style="border-radius: 45px;" type="submit" value="نشر">
+        </form>
+    </div>
+                {% else %}
+               
+                  <legend class="border-bottom pb-1 mb-3 ">قم <a style=" text-decoration: none;"  href="{% url 'login' %}">بتسجيل الدخول</a> او <a style=" text-decoration: none;" href="{% url 'register' %}">إنشاء حساب</a> حتى تشاركنا تجاربك. </legend>
+                {% endif %}
+   
+
+
+{% include 'pagination.html' with page=post %}
+
+     {%endblock%}
+
+     

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-md-12 mt-5">
+
+<div class="border p-4 mb-5">
+
+{% if object.mytype == "تجربة" %}
+<legend class="border-bottom pb-1 mb-3">حذف تجربة</legend>
+{% else %}
+<legend class="border-bottom pb-1 mb-3">حذف استفسار</legend>
+{% endif %}
+
+
+
+    
+
+
+
+
+    <form method="POST">
+  {% if object.mytype == "تجربة" %}
+   <legend class="pb-1 mb-3 mt-4" > هل انت متأكد من حذف هذه التجربة ؟ </legend>
+  {% else %}
+   <legend class="pb-1 mb-3 mt-4"> هل انت متأكد من حذف هذا الاستفسار ؟ </legend>
+  {% endif %}
+       
+        {% csrf_token %}
+        <input class="btn btn-danger mt-3"  style="border-radius: 45px;" type="submit" value="حذف">
+        <a class="btn btn-info mt-3 back-btn"  style="border-radius: 45px;" href="{% url 'detail' object.id %}">تراجع</a>
+    </form>
+</div>
+{% endblock content %}
